@@ -1,0 +1,627 @@
+swagger: "2.0"
+info:
+  description: "PMP在线测试系统，帮助您测试您的PMP报考通过机率，总结错题，强化痛点问题，海量题库。"
+  version: "1.0.0"
+  title: "PMP在线测试"
+  contact:
+    email: "yiuked@vip.qq.com"
+host: "petstore.swagger.io"
+basePath: "/v2"
+tags:
+- name: "type"
+  description: "考试类型、章节等"
+- name: "question"
+  description: "参与测试的考题"
+- name: "user"
+  description: "参与测试的用户"
+- name: "result"
+  description: "考试结果统计"
+schemes:
+- "https"
+- "http"
+paths:
+  /type:
+    post:
+      tags:
+      - "type"
+      summary: "添加考试类型"
+      description: "添加一个考试类型"
+      operationId: "addType"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "考试类型用于区分各种类型的考试"
+        required: true
+        schema:
+          $ref: "#/definitions/Type"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    put:
+      tags:
+      - "type"
+      summary: "更新类型"
+      description: "更新考试类型"
+      operationId: "updateType"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "更新考试类型"
+        required: true
+        schema:
+          $ref: "#/definitions/Type"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Pet not found"
+        405:
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    delete:
+      tags:
+      - "type"
+      summary: "删除一个分类"
+      description: "删除一个考试类型，该类型下只有考题为空时才能删除."
+      operationId: "deleteType"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "删除一个考试类型"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "Type not found"
+  /type/findByStatus:
+    get:
+      tags:
+      - "type"
+      summary: "读取考题分类"
+      description: "读取所有考题分类"
+      operationId: "findTypesByStatus"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "status"
+        in: "query"
+        description: "状态值需要加入筛选条件中r"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "available"
+          - "pending"
+          default: "available"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Type"
+        400:
+          description: "Invalid status value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /question:
+    post:
+      tags:
+      - "question"
+      summary: "添加题目"
+      operationId: "addQuestion"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Question"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    put:
+      tags:
+      - "question"
+      summary: "更新类型"
+      description: "更新考试类型"
+      operationId: "updateQuestion"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "更新考试类型"
+        required: true
+        schema:
+          $ref: "#/definitions/Question"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Pet not found"
+        405:
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    delete:
+      tags:
+      - "question"
+      summary: "删除一个分类"
+      description: "删除一个考试类型，该类型下只有考题为空时才能删除."
+      operationId: "deleteQuestion"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "删除一个考试类型"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "Type not found"
+  /question/findByType:
+    get:
+      tags:
+      - "question"
+      summary: "读取考题"
+      description: "读取分类下的考题"
+      operationId: "findQuestionsByStatus"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "idType"
+        in: "query"
+        description: "通过分类ID查询该分类下的考题"
+        required: true
+        type: "integer"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Question"
+        400:
+          description: "Invalid status value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "创建账户"
+      description: "创建一个新账户."
+      operationId: "createUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "创建一个新账户"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+    get:
+      tags:
+      - "user"
+      summary: "获取用户"
+      description: "通过用户名获取用户"
+      operationId: "getUserByName"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "通过用户名获得用户信息 "
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "更新用户"
+      description: "通过用户名更新用户信息."
+      operationId: "updateUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "更新用户信息"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+    delete:
+      tags:
+      - "user"
+      summary: "删除用户"
+      description: "删除一个账户."
+      operationId: "deleteUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "通过用户名删除用户"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+  /user/login:
+    get:
+      tags:
+      - "user"
+      summary: "用户登录"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "用户名"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "密码"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Invalid username/password supplied"
+  /user/logout:
+    get:
+      tags:
+      - "user"
+      summary: "用户登出"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+  /user/{user_id}:
+    get:
+      tags:
+      - "user"
+      summary: "用户信息"
+      description: ""
+      operationId: "userInfo"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "user_id"
+        in: "path"
+        description: "通过用户ID获取用户信息"
+        required: true
+        type: "integer"
+      responses:
+        default:
+          description: "successful operation"
+  /result:
+    post:
+      tags:
+      - "result"
+      summary: "添加题目"
+      operationId: "addResult"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Result"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    put:
+      tags:
+      - "result"
+      summary: "更新类型"
+      description: "更新考试类型"
+      operationId: "updateResult"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "更新考试类型"
+        required: true
+        schema:
+          $ref: "#/definitions/Result"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Pet not found"
+        405:
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    delete:
+      tags:
+      - "result"
+      summary: "删除一个分类"
+      description: "删除一个考试类型，该类型下只有考题为空时才能删除."
+      operationId: "deleteResult"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "删除一个考试类型"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "Type not found"
+  /result/findByUser:
+    get:
+      tags:
+      - "result"
+      summary: "读取考题"
+      description: "读取分类下的考题"
+      operationId: "findResultByUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "id_user"
+        in: "query"
+        description: "获取用户的考试结果"
+        required: true
+        type: "integer"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Result"
+        400:
+          description: "Invalid status value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Type:
+    type: "object"
+    properties:
+      id_type:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Type"
+  User:
+    type: "object"
+    properties:
+      id_user:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      nacename:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      wx_token:
+        type: "string"
+      user_status:
+        type: "integer"
+        format: "int32"
+      create_st:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "User"
+  Question:
+    type: "object"
+    properties:
+      id_question:
+        type: "integer"
+        format: "int64"
+      id_type:
+        type: "integer"
+        format: "int64"
+      question_title:
+        type: "string"
+      answer_a:
+        type: "string"
+      answer_b:
+        type: "string"
+      answer_c:
+        type: "string"
+      answer_d:
+        type: "string"
+      standard_answer:
+        type: "string"
+      analyze:
+        type: "string"
+      testing_number:
+        type: "integer"
+      right_number:
+        type: "integer"
+      question_status:
+        type: "integer"
+        format: "int32"
+      create_st:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "Question"
+  Result:
+    type: "object"
+    properties:
+      id_question:
+        type: "integer"
+        format: "int64"
+      id_type:
+        type: "integer"
+        format: "int64"
+      question_title:
+        type: "string"
+      answer_a:
+        type: "string"
+      answer_b:
+        type: "string"
+      answer_c:
+        type: "string"
+      answer_d:
+        type: "string"
+      standard_answer:
+        type: "string"
+      analyze:
+        type: "string"
+      testing_number:
+        type: "integer"
+      right_number:
+        type: "integer"
+      question_status:
+        type: "integer"
+        format: "int32"
+      create_st:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "Result"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
