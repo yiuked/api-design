@@ -133,6 +133,7 @@ paths:
       - petstore_auth:
         - "write:pets"
         - "read:pets"
+  
   /question:
     post:
       tags:
@@ -398,6 +399,7 @@ paths:
       responses:
         default:
           description: "successful operation"
+  
   /result:
     post:
       tags:
@@ -503,6 +505,35 @@ paths:
       - petstore_auth:
         - "write:pets"
         - "read:pets"
+
+  /sms:
+    post:
+      tags:
+      - "sms"
+      summary: "新增一条短信记录"
+      operationId: "addSms"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "phone"
+        in: "formData"
+        description: "发送短信的手机号 "
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Response"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+    
+
 securityDefinitions:
   petstore_auth:
     type: "oauth2"
@@ -622,6 +653,34 @@ definitions:
         format: "int64"
     xml:
       name: "Result"
+  Sms:
+    type: "object"
+    properties:
+      phone:
+        type: "string"
+      status:
+        type: "string"
+      msg:
+        type: "string"
+      created_at:
+        type: "string"
+      updated_at:
+        type: "string"
+      deleted_at:
+        type: "string"
+    xml:
+      name: "Sms"
+  Response:
+    type: "object"
+    properties:
+      RespCode:
+        type: "integer"
+      RespDesc:
+        type: "string"
+      RespData:
+        type: "object"
+    xml:
+      name: "Response"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
