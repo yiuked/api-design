@@ -505,7 +505,39 @@ paths:
       - petstore_auth:
         - "write:pets"
         - "read:pets"
-
+  
+  /testing:
+    post:
+      tags:
+      - "testing"
+      summary: "提交考试答案"
+      operationId: "testing"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "question_id"
+        in: "formData"
+        description: "提交的答案"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+      - name: "type_id"
+        in: "formData"
+        description: "考试类型ID"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Response"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
   /sms:
     post:
       tags:
@@ -670,6 +702,13 @@ definitions:
         type: "string"
     xml:
       name: "Sms"
+  Answer:
+    type: "object"
+    properties:
+      question_id:
+        type: "string"
+    xml:
+      name: "Answer"
   Response:
     type: "object"
     properties:
