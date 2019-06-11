@@ -538,6 +538,35 @@ paths:
           description: "Invalid username supplied"
         404:
           description: "User not found"
+  /testing/result:
+    get:
+      tags:
+      - "testing"
+      summary: "读取考试结果"
+      description: "通过考试ID读取考试结果"
+      operationId: "testingResult"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "result_id"
+        in: "query"
+        description: "获取用户的考试结果"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Result"
+        400:
+          description: "Invalid status value"
+      security:
+        - petstore_auth:
+          - "write:pets"
+          - "read:pets"
   /sms:
     post:
       tags:
